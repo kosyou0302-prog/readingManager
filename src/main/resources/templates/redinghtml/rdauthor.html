@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,25 +10,40 @@
 <body  class="container mt-4">
   <h2 th:text="${title}"></h2>
 
+  <!-- 著者登録フォーム -->
   <form th:action="@{/addAuthor}" method="post" th:object="${formModel}">
 
-    <div>
-      <label for="name" class="form-label me-3 mb-0">著者名：</label>
-      <input type="text" class="form-control" th:field="*{name}">
+    <!-- バリデーションエラーの総合表示 -->
+    <ul class="text-danger mb-3" th:if="${#fields.hasDetailedErrors()}">
+      <li th:each="error : ${#fields.detailedErrors()}" th:text="${error.message}"></li>
+    </ul>
+
+    <!-- 著者名入力 -->
+    <div class="mb-3">
+      <label for="name" class="form-label">著者名：</label>
+      <input type="text" class="form-control" th:field="*{name}" th:errorclass="is-invalid">
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
     </div>
 
-    <div>
+    <!-- 生年月日入力 -->
+    <div class="mb-3">
       <label for="birth" class="form-label">生年月日：</label>
-      <input type="date" class="form-control" th:field="*{birth}">
+      <input type="date" class="form-control w-auto" th:field="*{birth}" th:errorclass="is-invalid">
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('birth')}" th:errors="*{birth}"></div>
     </div>
 
-    <div>
+    <!-- 没年月日入力 -->
+    <div class="mb-3">
       <label for="death" class="form-label">没年月日：</label>
-      <input type="date" class="form-control" th:field="*{death}">
+      <input type="date" class="form-control w-auto" th:field="*{death}" th:errorclass="is-invalid">
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('death')}" th:errors="*{death}"></div>
     </div>
-    <button class="mt-2 mb-2" type="submit">登録</button>
+
+    <!-- 登録ボタン -->
+    <button class="btn btn-primary mt-2 mb-2" type="submit">登録</button>
   </form>
 
+  <!-- 戻るボタン -->
   <form th:action="@{/readingMng}" method="get" class="d-inline">
     <button type="submit" class="btn btn-secondary">戻る</button>
   </form>

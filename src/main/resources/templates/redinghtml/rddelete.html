@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,19 +10,25 @@
 <body  class="container mt-4">
   <h2 th:text="${title}"></h2>
 
+  <!-- 削除確認フォーム -->
   <form th:action="@{/deletelog}" method="post" th:object="${formModel}">
+    <!-- 削除対象のID（隠しフィールド） -->
     <input type="hidden" th:field="*{id}">
 
-    <ul>
-      <li>作品名： <span th:text="*{work.title}"></span></li>
-      <li>著者名： <span th:text="*{work.author.name}"></span></li>
-      <li>読了日： <span th:text="*{finishedDate}"></span></li>
-      <li>メモ： <span th:text="*{memo}"></span></li>
-      <li>評価： <span th:text="*{rating}"></span></li>
+    <!-- 削除対象の確認用詳細情報 -->
+    <ul class="list-group w-50 mb-3">
+      <li class="list-group-item"><strong>作品名：</strong> <span th:text="*{work.title}"></span></li>
+      <li class="list-group-item"><strong>著者名：</strong> <span th:text="*{work.author.name}"></span></li>
+      <li class="list-group-item"><strong>読了日：</strong> <span th:text="*{finishedDate}"></span></li>
+      <li class="list-group-item"><strong>メモ：</strong> <span th:text="*{memo}"></span></li>
+      <li class="list-group-item"><strong>評価：</strong> <span th:text="*{rating}"></span></li>
     </ul>
-    <button class="mt-2 mb-2" type="submit">削除</button>
+
+    <!-- 削除実行ボタン（赤色で警告感を演出） -->
+    <button class="btn btn-danger mt-2 mb-2" type="submit">削除する</button>
   </form>
 
+  <!-- 戻るボタン -->
   <form th:action="@{/readingMng}" method="get" class="d-inline">
     <button type="submit" class="btn btn-secondary">戻る</button>
   </form>

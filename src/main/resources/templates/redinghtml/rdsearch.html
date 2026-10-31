@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,35 +10,43 @@
 <body  class="container mt-4">
   <!-- 検索FROｍ -->
   <h2 th:text="${title}"></h2>
-  <form th:action="@{/searchWork}" method="post">
+  <form th:action="@{/searchWork}" method="post" th:object="${formModel}">
 
+    <!-- 作品名検索 -->
     <div class="mb-3 d-flex align-items-center">
-      <label for="name" class="form-label me-3 mb-0">作品名：</label>
-      <input type="text" name="title" placeholder="作品名で検索">
+      <label for="title" class="form-label me-3 mb-0" style="width: 100px;">作品名：</label>
+      <input type="text" class="form-control w-auto" th:field="*{title}" placeholder="作品名で検索">
     </div>
 
+    <!-- 著者選択プルダウン -->
     <div class="mb-3 d-flex align-items-center">
-      <label for="name" class="form-label me-3 mb-0">著者：</label>
-      <select name="authorId" class="form-select w-auto">
+      <label for="authorId" class="form-label me-3 mb-0" style="width: 100px;">著者：</label>
+      <select class="form-select w-auto" th:field="*{authorId}">
         <option value="">すべて</option>
         <option th:each="item : ${authorList}" th:value="${item.id}" th:text="${item.name}"></option>
       </select>
     </div>
 
+    <!-- 読了状態選択プルダウン -->
     <div class="mb-3 d-flex align-items-center">
-      <label for="finishedDate" class="form-label me-3 mb-0">読了状態：</label>
-        <select name="readStatus" class="form-select w-auto">
-          <option value="">すべて</option>
-          <option value="1">読了している</option>
-          <option value="2">読了していない</option>
-        </select>
+      <label for="readStatus" class="form-label me-3 mb-0" style="width: 100px;">読了状態：</label>
+      <select class="form-select w-auto" th:field="*{readStatus}">
+        <option value="">すべて</option>
+        <option value="1">読了している</option>
+        <option value="2">読了していない</option>
+      </select>
     </div>
-    <button class="mt-2 mb-2" type="submit">検索</button>
+
+    <!-- 検索ボタン -->
+    <button class="btn btn-primary mt-2" type="submit">検索</button>
   </form>
 
-  <form th:action="@{/readingMng}" method="get" class="d-inline">
-    <button type="submit" class="btn btn-secondary">戻る</button>
-  </form>
+  <!-- 戻るボタン -->
+  <div class="mb-5">
+    <form th:action="@{/readingMng}" method="get" class="d-inline">
+      <button type="submit" class="btn btn-secondary">戻る</button>
+    </form>
+  </div>
 
   <!-- 検索結果 -->
   <div class="container mt-4">
@@ -54,11 +62,13 @@
       </thead>
 
       <tbody>
+        <!-- 検索結果の作品リストをループ -->
         <tr th:each="item :${data}">
           <td th:text="${item.title}"></td>
           <td th:text="${item.author.name}"></td>
           <td th:text="${item.published}"></td>
           <td>
+            <!-- 紐付く読書記録の読了日を一覧表示 -->
             <span th:each="log : ${item.readingLogs}" th:text="${log.finishedDate}"></span>
           </td>
         </tr>
